@@ -21,13 +21,14 @@ public class PlayerController : MonoBehaviour {
             if (this != _instance)
                 Destroy(gameObject);
         }
-        m_skillsManager = new SkillsManager();
-        m_healthManager = new PlayerHealthManager();
+        m_healthManager = new PlayerHealthManager(m_fMaxHealth, m_fRecoveryRate);
         DontDestroyOnLoad(gameObject);
     }
     //======================================//
 
-    private SkillsManager m_skillsManager;
+    public Skill m_currentSkill;
+    public const float m_fMaxHealth = 1;
+    public const float m_fRecoveryRate = 0.06f;
     private PlayerHealthManager m_healthManager;
 
     public void ReceiveMouseInput(GameObject clicked)
@@ -35,10 +36,24 @@ public class PlayerController : MonoBehaviour {
         Enemy enemy = clicked.GetComponent<Enemy>();
         if (enemy)
         {
-            if (enemy.m_skillWeakTo == m_skillsManager.CurrentSkill())
+            bool success;
+            if (enemy.m_skillWeakTo == m_currentSkill.m_color)
             {
-                enemy.TakeDamage(m_skillsManager.CurrentSkillStrength());
+                success = enemy.TakeDamage(m_currentSkill.Strength());
             }
+            else
+            {
+                success = enemy.TakeDamage(0);
+            }
+            if (success)
+            {
+                m_currentSkill.Grow();
+            }
+        }
+        Skill skill = clicked.GetComponent<Skill>();
+        if (skill)
+        {
+            m_currentSkill = skill;
         }
     }
 
@@ -64,6 +79,6 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        m_healthManager.Update(Time.deltaTime);
 	}
 }
