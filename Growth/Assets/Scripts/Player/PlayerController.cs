@@ -21,21 +21,45 @@ public class PlayerController : MonoBehaviour {
             if (this != _instance)
                 Destroy(gameObject);
         }
+        m_skillsManager = new SkillsManager();
+        m_healthManager = new PlayerHealthManager();
         DontDestroyOnLoad(gameObject);
     }
     //======================================//
 
+    private SkillsManager m_skillsManager;
+    private PlayerHealthManager m_healthManager;
+
     public void ReceiveMouseInput(GameObject clicked)
     {
-        if (clicked.tag.Equals("Enemy"))
+        Enemy enemy = clicked.GetComponent<Enemy>();
+        if (enemy)
         {
-            Debug.Log(":D");
+            if (enemy.m_skillWeakTo == m_skillsManager.CurrentSkill())
+            {
+                enemy.TakeDamage(m_skillsManager.CurrentSkillStrength());
+            }
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        m_healthManager.TakeDamage(damage);
+    }
+
+    public void AddImageToHealthManager(SpriteRenderer image)
+    {
+        m_healthManager.AddImage(image);
+    }
+
+    public void RemoveImageFromHealthManager(SpriteRenderer image)
+    {
+        m_healthManager.RemoveImage(image);
     }
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
