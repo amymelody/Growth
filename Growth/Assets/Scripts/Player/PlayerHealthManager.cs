@@ -35,6 +35,7 @@ public class PlayerHealthManager {
         if (m_fHealth < 0)
             m_fHealth = 0;
         UpdateImages();
+        MusicManager.instance.SetLowPassCutoffFrequency(m_fHealth / m_fMaxHealth);
         if (m_fHealth == 0)
         {
             GameManager.instance.ResetLevel();
@@ -43,8 +44,7 @@ public class PlayerHealthManager {
 
     public void ResetHealth()
     {
-        m_fHealth = m_fMaxHealth;
-        UpdateImages();
+        ChangeHealth(m_fMaxHealth - m_fHealth);
     }
 
     public void TakeDamage(float damage)
