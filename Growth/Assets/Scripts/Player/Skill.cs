@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Skill : Entity {
 
-    public enum SkillColor { Red };
+    public enum SkillColor { Red, Blue };
 
     public SkillColor m_color;
     public SpriteRenderer m_nameImage;
@@ -17,9 +17,20 @@ public class Skill : Entity {
     private float m_fTimeSinceLastUse;
     private int m_iNumUses;
 
+    public void Enable()
+    {
+        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<BoxCollider2D>().enabled = true;
+    }
+
     public float Strength()
     {
         return m_fStrength;
+    }
+
+    public void ResetStrength()
+    {
+        m_fStrength = m_fBaseStrength;
     }
 
     public void Grow()
@@ -59,7 +70,9 @@ public class Skill : Entity {
 
 	// Use this for initialization
 	void Start () {
+        PlayerController.instance.AddSkill(this);
         PlayerController.instance.AddImageToHealthManager(GetComponent<SpriteRenderer>());
+        DontDestroyOnLoad(gameObject);
 	}
 	
 	// Update is called once per frame

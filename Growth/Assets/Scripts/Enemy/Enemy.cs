@@ -15,6 +15,13 @@ public class Enemy : Entity {
     private float m_fHealth;
     private float m_fCurrentShrinkRate;
     private float m_fInvulnerabilityTime;
+    private float m_fCurrentScale;
+
+    private void Die()
+    {
+        GameManager.instance.RemoveEnemy();
+        Destroy(gameObject);
+    }
 
     public bool TakeDamage(float damage)
     {
@@ -25,8 +32,9 @@ public class Enemy : Entity {
                 m_fTimeSinceLastHit = 0;
                 m_fHealth -= damage;
                 if (m_fHealth <= 0)
-                    Destroy(gameObject);
-                m_fCurrentShrinkRate = (damage * m_fInitialScale) / m_fTimeToShrink;
+                    Die();
+                m_fCurrentShrinkRate = (damage * m_fCurrentScale) / m_fTimeToShrink;
+                m_fCurrentScale -= m_fCurrentShrinkRate * m_fTimeToShrink;
             }   
             return true;
         }
@@ -38,6 +46,7 @@ public class Enemy : Entity {
         if (m_fTimeSinceLastHit >= m_fTimeBeforeGrowth && m_image.transform.localScale.x < m_fMaxScale)
         {
             float growthAmount = m_fGrowthRate * Time.deltaTime;
+            m_fCurrentScale += growthAmount;
             m_image.transform.localScale += new Vector3(growthAmount, growthAmount, growthAmount);
             PlayerController.instance.TakeDamage(growthAmount);
         }
@@ -58,10 +67,12 @@ public class Enemy : Entity {
 
 	// Use this for initialization
 	void Start () {
+        GameManager.instance.AddEnemy();
         PlayerController.instance.AddImageToHealthManager(m_image.GetComponent<SpriteRenderer>());
         m_fHealth = m_fMaxHealth;
+        m_fCurrentScale = m_fInitialScale;
         m_image.transform.localScale = new Vector3(m_fInitialScale, m_fInitialScale, m_fInitialScale);
-        m_fInvulnerabilityTime = 0.7f * m_fTimeToShrink;
+        m_fInvulnerabilityTime = 0.6f * m_fTimeToShrink;
 	}
 	
 	// Update is called once per frame

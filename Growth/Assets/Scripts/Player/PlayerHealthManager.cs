@@ -37,8 +37,14 @@ public class PlayerHealthManager {
         UpdateImages();
         if (m_fHealth == 0)
         {
-            Debug.Log("Game over!");
+            GameManager.instance.ResetLevel();
         }
+    }
+
+    public void ResetHealth()
+    {
+        m_fHealth = m_fMaxHealth;
+        UpdateImages();
     }
 
     public void TakeDamage(float damage)

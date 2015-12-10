@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
 
@@ -22,14 +23,16 @@ public class PlayerController : MonoBehaviour {
                 Destroy(gameObject);
         }
         m_healthManager = new PlayerHealthManager(m_fMaxHealth, m_fRecoveryRate);
+        m_skills = new List<Skill>();
         DontDestroyOnLoad(gameObject);
     }
     //======================================//
 
     public Skill m_currentSkill;
-    public const float m_fMaxHealth = 1;
-    public const float m_fRecoveryRate = 0.06f;
+    public float m_fMaxHealth = 1;
+    public float m_fRecoveryRate = 0.06f;
     private PlayerHealthManager m_healthManager;
+    private List<Skill> m_skills;
 
     public void ReceiveMouseInput(GameObject clicked)
     {
@@ -60,6 +63,28 @@ public class PlayerController : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         m_healthManager.TakeDamage(damage);
+    }
+
+    public void ShowSkills()
+    {
+        foreach (Skill skill in m_skills)
+        {
+            skill.Enable();
+        }
+    }
+
+    public void AddSkill(Skill skill)
+    {
+        m_skills.Add(skill);
+    }
+
+    public void ResetLevel()
+    {
+        m_healthManager.ResetHealth();
+        foreach (Skill skill in m_skills)
+        {
+            skill.ResetStrength();
+        }
     }
 
     public void AddImageToHealthManager(SpriteRenderer image)

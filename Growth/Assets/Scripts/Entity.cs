@@ -15,6 +15,6 @@ public class Entity : MonoBehaviour {
 
     void OnMouseDown()
     {
-        PlayerController.instance.ReceiveMouseInput(gameObject);
+        GameManager.instance.ReceiveMouseInput(gameObject);
     }
 }
