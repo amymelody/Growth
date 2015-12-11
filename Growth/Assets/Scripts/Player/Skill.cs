@@ -70,6 +70,7 @@ public class Skill : Entity {
 
 	// Use this for initialization
 	void Start () {
+        base.Start();
         PlayerController.instance.AddSkill(this);
         PlayerController.instance.AddImageToHealthManager(GetComponent<SpriteRenderer>());
         DontDestroyOnLoad(gameObject);
@@ -77,6 +78,7 @@ public class Skill : Entity {
 	
 	// Update is called once per frame
 	void Update () {
+        base.Update();
         UpdateStrength();
 	}
 

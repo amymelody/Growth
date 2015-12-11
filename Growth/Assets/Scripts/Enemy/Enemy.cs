@@ -67,6 +67,7 @@ public class Enemy : Entity {
 
 	// Use this for initialization
 	void Start () {
+        base.Start();
         GameManager.instance.AddEnemy();
         PlayerController.instance.AddImageToHealthManager(m_image.GetComponent<SpriteRenderer>());
         m_fHealth = m_fMaxHealth;
@@ -77,11 +78,16 @@ public class Enemy : Entity {
 	
 	// Update is called once per frame
 	void Update () {
+        base.Update();
         UpdateGrowth();
 	}
 
     void OnDestroy()
     {
         PlayerController.instance.RemoveImageFromHealthManager(m_image.GetComponent<SpriteRenderer>());
+        if (!GameManager.isShuttingDown)
+        {
+            Instantiate(Prefabs.Explosion_Rainbow_Small, transform.position, transform.rotation);
+        }
     }
 }

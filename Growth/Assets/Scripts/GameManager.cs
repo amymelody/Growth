@@ -23,9 +23,13 @@ public class GameManager : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
     }
+    //======================================//
+
+    public static bool isShuttingDown;
 
     private int m_iNumEnemies;
-    private int m_icurrentLevel = 1;
+    private int m_iCurrentLevel = 1;
+    private float m_fWaitTimeBeforeLoadNextLevel = 2f;
 
     public void ResetLevel()
     {
@@ -38,6 +42,12 @@ public class GameManager : MonoBehaviour {
     {
         Application.LoadLevel("level1");
         PlayerController.instance.ShowSkills();
+    }
+
+    private void LoadNextLevel()
+    {
+        m_iCurrentLevel++;
+        Application.LoadLevel("level" + m_iCurrentLevel);
     }
 
     public void ReceiveMouseInput(GameObject clicked)
@@ -60,10 +70,14 @@ public class GameManager : MonoBehaviour {
         m_iNumEnemies--;
         if (m_iNumEnemies == 0)
         {
-            //Load next level
-            m_icurrentLevel++;
-            Application.LoadLevel("level" + m_icurrentLevel);
+            Instantiate(Prefabs.Explosion_Rainbow_Large, Vector3.zero, Quaternion.identity);
+            Invoke("LoadNextLevel", m_fWaitTimeBeforeLoadNextLevel);
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        isShuttingDown = true;
     }
 
 	// Use this for initialization
