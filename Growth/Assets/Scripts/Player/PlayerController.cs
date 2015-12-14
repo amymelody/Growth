@@ -28,9 +28,9 @@ public class PlayerController : MonoBehaviour {
     }
     //======================================//
 
-    public Skill m_currentSkill;
     public float m_fMaxHealth = 1;
     public float m_fRecoveryRate = 0.06f;
+    private Skill m_currentSkill;
     private PlayerHealthManager m_healthManager;
     private List<Skill> m_skills;
 
@@ -39,24 +39,28 @@ public class PlayerController : MonoBehaviour {
         Enemy enemy = clicked.GetComponent<Enemy>();
         if (enemy)
         {
-            bool success;
-            if (enemy.m_skillWeakTo == m_currentSkill.m_color)
+            if (m_currentSkill)
             {
-                success = enemy.TakeDamage(m_currentSkill.Strength());
-            }
-            else
-            {
-                success = enemy.TakeDamage(0);
-            }
-            if (success)
-            {
-                m_currentSkill.Grow();
+                bool success;
+                if (enemy.m_skillWeakTo == m_currentSkill.m_color)
+                {
+                    success = enemy.TakeDamage(m_currentSkill.Strength());
+                }
+                else
+                {
+                    success = enemy.TakeDamage(0);
+                }
+                if (success)
+                {
+                    m_currentSkill.Grow();
+                }
             }
         }
         Skill skill = clicked.GetComponent<Skill>();
         if (skill)
         {
             m_currentSkill = skill;
+            GameManager.instance.SetCursorFromCurrentSkill(m_currentSkill.m_color);
         }
     }
 

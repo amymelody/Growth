@@ -7,11 +7,10 @@ public class Skill : Entity {
 
     public SkillColor m_color;
     public SpriteRenderer m_nameImage;
-    public int m_iNumUsesBeforeGrowth = 5;
     public float m_fTimeBeforeWeaken = 3.0f;
     public float m_fWeakenRate = 0.1f;
     public float m_fGrowthRate = 0.1f;
-    public float m_fBaseStrength;
+    public float m_fBaseStrength = 0.1f;
     public float m_fMaxStrength = 1;
     private float m_fStrength;
     private float m_fTimeSinceLastUse;
@@ -36,15 +35,9 @@ public class Skill : Entity {
     public void Grow()
     {
         m_fTimeSinceLastUse = 0;
-        if (m_iNumUses < m_iNumUsesBeforeGrowth)
-            m_iNumUses++;
-        if (m_iNumUses >= m_iNumUsesBeforeGrowth)
-        {
-            m_fStrength += m_fGrowthRate;
-            MusicManager.instance.ChangeGrowth(m_fGrowthRate);
-            if (m_fStrength > m_fMaxStrength)
-                m_fStrength = m_fMaxStrength;
-        }
+        m_fStrength += m_fGrowthRate;
+        if (m_fStrength > m_fMaxStrength)
+            m_fStrength = m_fMaxStrength;
     }
 
     private void UpdateStrength()
@@ -54,17 +47,15 @@ public class Skill : Entity {
             m_iNumUses = 0;
             float weakenAmount = m_fWeakenRate * Time.deltaTime;
             m_fStrength -= weakenAmount;
-            if (PlayerController.instance.m_currentSkill == this)
-                MusicManager.instance.ChangeGrowth(-weakenAmount);
-            if (m_fStrength < 0)
-                m_fStrength = 0;
+            if (m_fStrength < m_fBaseStrength)
+                m_fStrength = m_fBaseStrength;
         }
         else
         {
             m_fTimeSinceLastUse += Time.deltaTime;
         }
         Color currentColor = m_nameImage.color;
-        currentColor.a = m_fStrength / m_fMaxStrength;
+        currentColor.a = (m_fStrength - m_fBaseStrength) / (m_fMaxStrength - m_fBaseStrength); ;
         m_nameImage.color = currentColor;
     }
 
@@ -73,6 +64,7 @@ public class Skill : Entity {
         base.Start();
         PlayerController.instance.AddSkill(this);
         PlayerController.instance.AddImageToHealthManager(GetComponent<SpriteRenderer>());
+        ResetStrength();
         DontDestroyOnLoad(gameObject);
 	}
 	

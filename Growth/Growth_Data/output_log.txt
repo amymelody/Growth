@@ -15,25 +15,12 @@ Loading D:\Amy\Personal\Growth\Growth\Growth_Data\Managed\UnityEngine.UI.dll int
 Platform assembly: D:\Amy\Personal\Growth\Growth\Growth_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\Amy\Personal\Growth\Growth\Growth_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Amy\Personal\Growth\Growth\Growth_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.112 seconds
+- Completed reload, in  0.049 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
 Platform assembly: D:\Amy\Personal\Growth\Growth\Growth_Data\Managed\System.dll (this message is harmless)
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 6198 -> priority: 1 
-  Thread -> id: 577c -> priority: 1 
-Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.332542 ms
-
-Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 197.
-Total: 0.116184 ms (FindLiveObjects: 0.012726 ms CreateObjectMapping: 0.008621 ms MarkObjects: 0.088267 ms  DeleteObjects: 0.006158 ms)
-
-NullReferenceException
-  at (wrapper managed-to-native) UnityEngine.GameObject:GetComponentFastPath (System.Type,intptr)
-  at UnityEngine.GameObject.GetComponent[SpriteRenderer] () [0x00000] in <filename unknown>:0 
-  at Enemy.OnDestroy () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
+  Thread -> id: 2b750 -> priority: 1 
+  Thread -> id: 2b734 -> priority: 1 

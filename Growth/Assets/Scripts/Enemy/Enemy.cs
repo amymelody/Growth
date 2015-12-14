@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Enemy : Entity {
 
+    public GUIText m_damageText;
     public Skill.SkillColor m_skillWeakTo = Skill.SkillColor.Red;
     public GameObject m_image;
     public float m_fTimeBeforeGrowth = 3.0f;
@@ -16,6 +17,7 @@ public class Enemy : Entity {
     private float m_fCurrentShrinkRate;
     private float m_fInvulnerabilityTime;
     private float m_fCurrentScale;
+    private const float m_fHealthDisplayScale = 100f;
 
     private void Die()
     {
@@ -27,6 +29,8 @@ public class Enemy : Entity {
     {
         if (m_fTimeSinceLastHit < 0 || m_fTimeSinceLastHit > m_fInvulnerabilityTime)
         {
+            int displayDamage = (int)(damage * m_fHealthDisplayScale);
+            m_damageText.text = "-" + displayDamage.ToString();
             if (damage > 0)
             {
                 m_fTimeSinceLastHit = 0;
@@ -43,25 +47,32 @@ public class Enemy : Entity {
 
     private void UpdateGrowth()
     {
-        if (m_fTimeSinceLastHit >= m_fTimeBeforeGrowth && m_image.transform.localScale.x < m_fMaxScale)
+        if (m_fTimeSinceLastHit >= 0)
         {
-            float growthAmount = m_fGrowthRate * Time.deltaTime;
-            m_fCurrentScale += growthAmount;
-            m_image.transform.localScale += new Vector3(growthAmount, growthAmount, growthAmount);
-            PlayerController.instance.TakeDamage(growthAmount);
-        }
-        else
-        {
-            if (m_fTimeSinceLastHit < m_fTimeToShrink)
+            if (m_fTimeSinceLastHit >= m_fTimeBeforeGrowth && m_image.transform.localScale.x < m_fMaxScale)
             {
-                float shrinkAmount = m_fCurrentShrinkRate * Time.deltaTime;
-                m_image.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
+                float growthAmount = m_fGrowthRate * Time.deltaTime;
+                m_fCurrentScale += growthAmount;
+                m_image.transform.localScale += new Vector3(growthAmount, growthAmount, growthAmount);
+                PlayerController.instance.TakeDamage(growthAmount);
             }
             else
             {
-                m_fCurrentShrinkRate = 0;
+                if (m_fTimeSinceLastHit < m_fTimeToShrink)
+                {
+                    float shrinkAmount = m_fCurrentShrinkRate * Time.deltaTime;
+                    m_image.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
+                    if (m_fTimeSinceLastHit >= m_fTimeToShrink / 2f)
+                    {
+                        m_damageText.text = "";
+                    }
+                }
+                else
+                {
+                    m_fCurrentShrinkRate = 0;
+                }
+                m_fTimeSinceLastHit += Time.deltaTime;
             }
-            m_fTimeSinceLastHit += Time.deltaTime;
         }
     }
 
@@ -74,6 +85,7 @@ public class Enemy : Entity {
         m_fCurrentScale = m_fInitialScale;
         m_image.transform.localScale = new Vector3(m_fInitialScale, m_fInitialScale, m_fInitialScale);
         m_fInvulnerabilityTime = 0.6f * m_fTimeToShrink;
+        m_damageText.fontSize = Screen.width / 50;
 	}
 	
 	// Update is called once per frame
