@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour {
                 Destroy(gameObject);
         }
         m_healthManager = new PlayerHealthManager(m_fMaxHealth, m_fRecoveryRate);
-        m_skills = new List<Skill>();
+        m_skills = new Dictionary<Skill.SkillColor, Skill>();
         DontDestroyOnLoad(gameObject);
     }
     //======================================//
@@ -32,28 +32,25 @@ public class PlayerController : MonoBehaviour {
     public float m_fRecoveryRate = 0.06f;
     private Skill m_currentSkill;
     private PlayerHealthManager m_healthManager;
-    private List<Skill> m_skills;
+    private Dictionary<Skill.SkillColor, Skill> m_skills;
 
     public void ReceiveMouseInput(GameObject clicked)
     {
         Enemy enemy = clicked.GetComponent<Enemy>();
         if (enemy)
         {
-            if (m_currentSkill)
+            bool success;
+            if (m_currentSkill && enemy.m_skillWeakTo == m_currentSkill.m_color)
             {
-                bool success;
-                if (enemy.m_skillWeakTo == m_currentSkill.m_color)
-                {
-                    success = enemy.TakeDamage(m_currentSkill.Strength());
-                }
-                else
-                {
-                    success = enemy.TakeDamage(0);
-                }
-                if (success)
-                {
-                    m_currentSkill.Grow();
-                }
+                success = enemy.TakeDamage(m_currentSkill.Strength());
+            }
+            else
+            {
+                success = enemy.TakeDamage(0);
+            }
+            if (success && m_currentSkill)
+            {
+                m_currentSkill.Grow();
             }
         }
         Skill skill = clicked.GetComponent<Skill>();
@@ -69,23 +66,15 @@ public class PlayerController : MonoBehaviour {
         m_healthManager.TakeDamage(damage);
     }
 
-    public void ShowSkills()
-    {
-        foreach (Skill skill in m_skills)
-        {
-            skill.Enable();
-        }
-    }
-
     public void AddSkill(Skill skill)
     {
-        m_skills.Add(skill);
+        m_skills.Add(skill.m_color, skill);
     }
 
     public void ResetLevel()
     {
         m_healthManager.ResetHealth();
-        foreach (Skill skill in m_skills)
+        foreach (Skill skill in m_skills.Values)
         {
             skill.ResetStrength();
         }
@@ -99,6 +88,16 @@ public class PlayerController : MonoBehaviour {
     public void RemoveImageFromHealthManager(SpriteRenderer image)
     {
         m_healthManager.RemoveImage(image);
+    }
+
+    public void AddEnemy(Enemy enemy)
+    {
+        AddImageToHealthManager(enemy.m_image.GetComponent<SpriteRenderer>());
+        Skill skill = m_skills[enemy.m_skillWeakTo];
+        if (skill)
+        {
+            skill.Enable();
+        }
     }
 
 	// Use this for initialization

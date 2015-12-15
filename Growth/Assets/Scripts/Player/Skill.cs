@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Skill : Entity {
 
-    public enum SkillColor { Red, Blue };
+    public enum SkillColor { Red, Blue, Yellow, Green };
 
     public SkillColor m_color;
     public SpriteRenderer m_nameImage;

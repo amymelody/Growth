@@ -49,6 +49,12 @@ public class GameManager : MonoBehaviour {
             case Skill.SkillColor.Blue:
                 m_currentCursor = Textures.Cursor_Blue_Texture;
                 break;
+            case Skill.SkillColor.Yellow:
+                m_currentCursor = Textures.Cursor_Yellow_Texture;
+                break;
+            case Skill.SkillColor.Green:
+                m_currentCursor = Textures.Cursor_Green_Texture;
+                break;
             default:
                 m_currentCursor = Textures.Cursor_Base_Texture;
                 break;
@@ -65,7 +71,6 @@ public class GameManager : MonoBehaviour {
     private void StartGame()
     {
         Application.LoadLevel("level1");
-        PlayerController.instance.ShowSkills();
     }
 
     private void LoadNextLevel()

@@ -10,6 +10,7 @@ public class PlayerHealthManager {
     private float m_fTimeBeforeRecover = 2.0f;
     private float m_fTimeSinceLastHit;
     private float m_fRecoveryRate;
+    private float m_fDamageMultiplier = 0.6f;
 
 	public PlayerHealthManager(float maxHealth, float recoveryRate)
     {
@@ -50,7 +51,7 @@ public class PlayerHealthManager {
     public void TakeDamage(float damage)
     {
         m_fTimeSinceLastHit = 0;
-        ChangeHealth(-damage);
+        ChangeHealth(-damage * m_fDamageMultiplier);
     }
 
     public void AddImage(SpriteRenderer image)

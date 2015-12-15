@@ -11,4 +11,10 @@ public class Textures
 
     private static string cursor_blue_texture_path = "Images/img_cursor_blue";
     public static Texture2D Cursor_Blue_Texture { get { return (Resources.Load(cursor_blue_texture_path) as Texture2D); } }
+
+    private static string cursor_yellow_texture_path = "Images/img_cursor_yellow";
+    public static Texture2D Cursor_Yellow_Texture { get { return (Resources.Load(cursor_yellow_texture_path) as Texture2D); } }
+
+    private static string cursor_green_texture_path = "Images/img_cursor_green";
+    public static Texture2D Cursor_Green_Texture { get { return (Resources.Load(cursor_green_texture_path) as Texture2D); } }
 }
