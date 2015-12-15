@@ -42,28 +42,31 @@ public class Skill : Entity {
 
     private void UpdateStrength()
     {
-        if (m_fTimeSinceLastUse >= m_fTimeBeforeWeaken)
+        if (!GameManager.instance.GameEnded())
         {
-            m_iNumUses = 0;
-            float weakenAmount = m_fWeakenRate * Time.deltaTime;
-            m_fStrength -= weakenAmount;
-            if (m_fStrength < m_fBaseStrength)
-                m_fStrength = m_fBaseStrength;
+            if (m_fTimeSinceLastUse >= m_fTimeBeforeWeaken)
+            {
+                m_iNumUses = 0;
+                float weakenAmount = m_fWeakenRate * Time.deltaTime;
+                m_fStrength -= weakenAmount;
+                if (m_fStrength < m_fBaseStrength)
+                    m_fStrength = m_fBaseStrength;
+            }
+            else
+            {
+                m_fTimeSinceLastUse += Time.deltaTime;
+            }
+            Color currentColor = m_nameImage.color;
+            currentColor.a = (m_fStrength - m_fBaseStrength) / (m_fMaxStrength - m_fBaseStrength); ;
+            m_nameImage.color = currentColor;
         }
-        else
-        {
-            m_fTimeSinceLastUse += Time.deltaTime;
-        }
-        Color currentColor = m_nameImage.color;
-        currentColor.a = (m_fStrength - m_fBaseStrength) / (m_fMaxStrength - m_fBaseStrength); ;
-        m_nameImage.color = currentColor;
     }
 
 	// Use this for initialization
 	void Start () {
         base.Start();
         PlayerController.instance.AddSkill(this);
-        PlayerController.instance.AddImageToHealthManager(GetComponent<SpriteRenderer>());
+        WorldEffectsManager.instance.AddImage(GetComponent<SpriteRenderer>());
         ResetStrength();
         DontDestroyOnLoad(gameObject);
 	}
@@ -76,6 +79,6 @@ public class Skill : Entity {
 
     void OnDestroy()
     {
-        PlayerController.instance.RemoveImageFromHealthManager(GetComponent<SpriteRenderer>());
+        WorldEffectsManager.instance.RemoveImage(GetComponent<SpriteRenderer>());
     }
 }

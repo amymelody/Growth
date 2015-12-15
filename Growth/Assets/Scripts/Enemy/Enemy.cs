@@ -4,6 +4,7 @@ using System.Collections;
 public class Enemy : Entity {
 
     public GUIText m_damageText;
+    public ObjectLabel m_objectLabel;
     public Skill.SkillColor m_skillWeakTo = Skill.SkillColor.Red;
     public GameObject m_image;
     public float m_fTimeBeforeGrowth = 3.0f;
@@ -83,6 +84,7 @@ public class Enemy : Entity {
             }
             m_fTimeSinceLastTryHit += Time.deltaTime;
         }
+        m_objectLabel.offset = new Vector3(0, 1f + 2f * transform.localScale.x, 0);
     }
 
 	// Use this for initialization
@@ -94,7 +96,7 @@ public class Enemy : Entity {
         m_fCurrentScale = m_fInitialScale;
         m_image.transform.localScale = new Vector3(m_fInitialScale, m_fInitialScale, m_fInitialScale);
         m_fInvulnerabilityTime = 0.6f * m_fTimeToShrink;
-        m_damageText.fontSize = Screen.width / 50;
+        m_damageText.fontSize = Screen.width / 45;
 	}
 	
 	// Update is called once per frame
@@ -106,7 +108,7 @@ public class Enemy : Entity {
 
     void OnDestroy()
     {
-        PlayerController.instance.RemoveImageFromHealthManager(m_image.GetComponent<SpriteRenderer>());
+        WorldEffectsManager.instance.RemoveImage(m_image.GetComponent<SpriteRenderer>());
         if (!GameManager.isShuttingDown && m_fHealth <= 0)
         {
             Instantiate(Prefabs.Explosion_Rainbow_Small, transform.position, transform.rotation);

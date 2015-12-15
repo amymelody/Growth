@@ -38,6 +38,12 @@ public class GameManager : MonoBehaviour {
     private int m_iCursorWidth = 32;
     private int m_iCursorHeight = 32;
     private bool m_bMouseInGame = false;
+    private bool m_bGameEnded;
+
+    public bool GameEnded()
+    {
+        return m_bGameEnded;
+    }
 
     public void SetCursorFromCurrentSkill(Skill.SkillColor color)
     {
@@ -73,11 +79,18 @@ public class GameManager : MonoBehaviour {
         Application.LoadLevel("level1");
     }
 
+    private void EndGame()
+    {
+        m_bGameEnded = true;
+        WorldEffectsManager.instance.StartBackgroundFadeToWhite();
+    }
+
     private void LoadNextLevel()
     {
         if (m_iCurrentLevel == m_iNumLevels)
         {
             Application.LoadLevel("end");
+            EndGame();
         }
         else
         {

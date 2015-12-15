@@ -80,19 +80,9 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    public void AddImageToHealthManager(SpriteRenderer image)
-    {
-        m_healthManager.AddImage(image);
-    }
-
-    public void RemoveImageFromHealthManager(SpriteRenderer image)
-    {
-        m_healthManager.RemoveImage(image);
-    }
-
     public void AddEnemy(Enemy enemy)
     {
-        AddImageToHealthManager(enemy.m_image.GetComponent<SpriteRenderer>());
+        WorldEffectsManager.instance.AddImage(enemy.m_image.GetComponent<SpriteRenderer>());
         Skill skill = m_skills[enemy.m_skillWeakTo];
         if (skill)
         {
