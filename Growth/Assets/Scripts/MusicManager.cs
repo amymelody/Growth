@@ -32,9 +32,9 @@ public class MusicManager : MonoBehaviour {
     public AudioSource m_growth;
     public AudioLowPassFilter m_lowPassFilter;
 
-    public void ChangeGrowth(float amount)
+    public void SetGrowthVolume(float volume)
     {
-        m_growth.volume += amount;
+        m_growth.volume = volume;
     }
 
     public void SetLowPassCutoffFrequency(float normalizedFreq)

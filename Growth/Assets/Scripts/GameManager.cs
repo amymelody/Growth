@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour {
         }
         else
         {
-            MusicManager.instance.ChangeGrowth(1f / (float)(m_iNumLevels - 1));
+            MusicManager.instance.SetGrowthVolume(MathHelpers.QuadraticInterpolation(0, 1, (float)m_iCurrentLevel / (float)(m_iNumLevels - 1)));
             m_iCurrentLevel++;
             Application.LoadLevel("level" + m_iCurrentLevel);
         }

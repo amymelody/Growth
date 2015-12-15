@@ -42,7 +42,16 @@ public class Skill : Entity {
 
     private void UpdateStrength()
     {
-        if (!GameManager.instance.GameEnded())
+        if (GameManager.instance.GameEnded())
+        {
+            if (m_fStrength < m_fMaxStrength)
+            {
+                m_fStrength += m_fGrowthRate * Time.deltaTime;
+                if (m_fStrength > m_fMaxStrength)
+                    m_fStrength = m_fMaxStrength;
+            }
+        }
+        else
         {
             if (m_fTimeSinceLastUse >= m_fTimeBeforeWeaken)
             {
@@ -56,10 +65,10 @@ public class Skill : Entity {
             {
                 m_fTimeSinceLastUse += Time.deltaTime;
             }
-            Color currentColor = m_nameImage.color;
-            currentColor.a = (m_fStrength - m_fBaseStrength) / (m_fMaxStrength - m_fBaseStrength); ;
-            m_nameImage.color = currentColor;
         }
+        Color currentColor = m_nameImage.color;
+        currentColor.a = (m_fStrength - m_fBaseStrength) / (m_fMaxStrength - m_fBaseStrength); ;
+        m_nameImage.color = currentColor;
     }
 
 	// Use this for initialization

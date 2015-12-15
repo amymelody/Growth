@@ -60,7 +60,11 @@ public class WorldEffectsManager : MonoBehaviour {
         if (m_bFading)
         {
             m_fTimePassed += Time.deltaTime;
-            Camera.main.backgroundColor = Color.Lerp(Color.black, Color.white, m_fTimePassed / m_fTimeToFade);
+            Color color = Color.black;
+            color.r = MathHelpers.QuadraticInterpolation(Color.black.r, Color.white.r, m_fTimePassed / m_fTimeToFade);
+            color.g = MathHelpers.QuadraticInterpolation(Color.black.g, Color.white.g, m_fTimePassed / m_fTimeToFade);
+            color.b = MathHelpers.QuadraticInterpolation(Color.black.b, Color.white.b, m_fTimePassed / m_fTimeToFade);
+            Camera.main.backgroundColor = color;
             if (m_fTimePassed >= m_fTimeToFade)
             {
                 m_bFading = false;
